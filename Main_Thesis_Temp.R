@@ -19,8 +19,8 @@ patience = 100
 
 # Intervals of pars to sample from
 pars_intervals = matrix(data = c(c(0.01,0.3,0,-0.01), c(0.25,0.8,0.1,-0.003)), nrow=n_pars, ncol=2)
-n_trees_ic = 10 # number of different ic combinations to try for find_ic()
-n_trees_X_ic = 3 # number of trees to generate for each ic combination
+n_trees_ic = 100 # number of different ic combinations to try for find_ic()
+n_trees_X_ic = 10 # number of trees to generate for each ic combination
   
 # Taking temperatures and simplifying
 temp = paleobuddy::temp
