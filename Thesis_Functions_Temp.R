@@ -183,7 +183,8 @@ grad_descent_constD = function(tp, D, M, stats_obs, n_stats, n_pars, learn_rate,
   stats_diff = matrix(nrow=0,ncol=n_stats)
   stats_diff_abs = c()
   ll = learn_rate
-  
+  MD = M%*%D
+  MD = sweep(MD, 2, abs(pars_i), '*')
   
   t_i = Sys.time()
   while (c < iters){ # CHANGE CONDITION
@@ -211,7 +212,7 @@ grad_descent_constD = function(tp, D, M, stats_obs, n_stats, n_pars, learn_rate,
     # compare stats
     diff = stats_gen - stats_obs 
     # update pars
-    pars_new = pars_i - learn_rate*(M%*%D%*%(diff))
+    pars_new = pars_i - learn_rate*(MD%*%(diff))
     
     # update condition (check diff in pars with prev iter and diff in stats on this iter)
     cond = pars_new - pars_i
@@ -224,7 +225,7 @@ grad_descent_constD = function(tp, D, M, stats_obs, n_stats, n_pars, learn_rate,
     while (pars_new[length(pars_new)] > 0){
       #cat("LR: ", learn_rate, " -> ", learn_rate/2, "\n")
       learn_rate = learn_rate/2
-      pars_new = pars_i - learn_rate*(M%*%D%*%(diff))
+      pars_new = pars_i - learn_rate*(MD%*%(diff))
       lr_count = lr_count + 1
       
       # set limit on times we reduce lr_count
@@ -281,7 +282,8 @@ grad_descent_constD = function(tp, D, M, stats_obs, n_stats, n_pars, learn_rate,
     c = c + 1
     print(c)
     cat("pars_new = ", pars_i, "\n")
-    cat("stats_diff = \n", round(diff,1), "\n")
+    #cat("stats_diff = \n", round(diff,1), "\n")
+    cat("tot_abs_stats_diff = ", sum(abs(diff)), "\n", sep="")
     pars = rbind(pars, t(pars_i))
     
   }
@@ -322,7 +324,7 @@ run_sgd_DD = function(tp, calc_D = TRUE, stats_obs, n_stats, n_pars, learn_rate,
   learn_rate = res$learn_rate
   
   return(list(pars=pars, stats_diff=stats_diff, stats_diff_abs=stats_diff_abs,
-              D=D, M=M, runtime_tot=runtime_tot, learn_rate=learn_rate))
+              D=D, M=M, MD=MD, runtime_tot=runtime_tot, learn_rate=learn_rate))
 }
 
 
