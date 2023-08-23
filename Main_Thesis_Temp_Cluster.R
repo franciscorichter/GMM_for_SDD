@@ -9,8 +9,8 @@ true_pars = c(mu_0, betas)
 n_stats = 50 # number of statistics (ltt points in this case)
 n_pars = 4 # number of parameters (including mu)
 learn_rate = 1e-5
-iters = 1000 # max number of iterations for the code to stop
-n_trees_D = 100 # number of trees simulated to compute D
+iters = 3000 # max number of iterations for the code to stop
+n_trees_D = 1000 # number of trees simulated to compute D
 n_trees_sgd = 1 # number of trees simulated at each step of SGD
 ltt_points = 50 # number of ltt points
 times = seq(round(tp-1),0,length.out=ltt_points) # times
@@ -19,7 +19,7 @@ patience = 100
 
 # Intervals of pars to sample from
 pars_intervals = matrix(data = c(c(0.01,0.3,0,-0.01), c(0.25,0.8,0.1,-0.003)), nrow=n_pars, ncol=2)
-n_trees_ic = 100 # number of different ic combinations to try for find_ic()
+n_trees_ic = 500 # number of different ic combinations to try for find_ic()
 n_trees_X_ic = 3 # number of trees to generate for each ic combination
   
 # Taking temperatures and simplifying
