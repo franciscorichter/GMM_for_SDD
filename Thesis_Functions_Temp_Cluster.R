@@ -324,7 +324,7 @@ run_sgd_DD = function(tp, calc_D = TRUE, stats_obs, n_stats, n_pars, learn_rate,
   learn_rate = res$learn_rate
   
   return(list(pars=pars, stats_diff=stats_diff, stats_diff_abs=stats_diff_abs,
-              D=D, M=M, MD=MD, runtime_tot=runtime_tot, learn_rate=learn_rate))
+              D=D, M=M, runtime_tot=runtime_tot, learn_rate=learn_rate))
 }
 
 
@@ -554,6 +554,57 @@ calculate_gradients <- function(parameters, tree_data, covariates_list, include_
   return(gradient)
 }
 
+
+L2hylo = function (L, dropextinct = T) 
+{
+  L = L[order(abs(L[, 3])), 1:4]
+  age = L[1, 1]
+  L[, 1] = age - L[, 1]
+  L[1, 1] = -1
+  notmin1 = which(L[, 4] != -1)
+  L[notmin1, 4] = age - L[notmin1, 4]
+  if (dropextinct == T) {
+    sall = which(L[, 4] == -1)
+    tend = age
+  }
+  else {
+    sall = which(L[, 4] >= -1)
+    tend = (L[, 4] == -1) * age + (L[, 4] > -1) * L[, 4]
+  }
+  L = L[, -4]
+  linlist = cbind(data.frame(L[sall, ]), paste("t", abs(L[sall, 
+                                                          3]), sep = ""), tend)
+  linlist[, 4] = as.character(linlist[, 4])
+  names(linlist) = 1:5
+  done = 0
+  while (done == 0) {
+    j = which.max(linlist[, 1])
+    daughter = linlist[j, 3]
+    parent = linlist[j, 2]
+    parentj = which(parent == linlist[, 3])
+    parentinlist = length(parentj)
+    if (parentinlist == 1) {
+      spec1 = paste(linlist[parentj, 4], ":", linlist[parentj, 
+                                                      5] - linlist[j, 1], sep = "")
+      spec2 = paste(linlist[j, 4], ":", linlist[j, 5] - 
+                      linlist[j, 1], sep = "")
+      linlist[parentj, 4] = paste("(", spec1, ",", spec2, 
+                                  ")", sep = "")
+      linlist[parentj, 5] = linlist[j, 1]
+      linlist = linlist[-j, ]
+    }
+    else {
+      linlist[j, 1:3] = L[which(L[, 3] == parent), 1:3]
+    }
+    if (nrow(linlist) == 1) {
+      done = 1
+    }
+  }
+  linlist[4] = paste(linlist[4], ":", linlist[5], ";", sep = "")
+  phy = ape::read.tree(text = linlist[1, 4])
+  tree = ape::as.phylo(phy)
+  return(tree)
+}
 
 
 # 
