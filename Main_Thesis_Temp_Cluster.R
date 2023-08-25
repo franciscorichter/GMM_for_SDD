@@ -1,4 +1,4 @@
-source("Thesis_Functions_Temp.R")
+source("Thesis_Functions_Temp_Cluster.R")
 
 
 tp = 5 # total time (mln of years)
@@ -8,10 +8,10 @@ true_pars = c(mu_0, betas)
 
 n_stats = 50 # number of statistics (ltt points in this case)
 n_pars = 4 # number of parameters (including mu)
-learn_rate = 1e-5
+learn_rate = 1e-4
 iters = 3000 # max number of iterations for the code to stop
 n_trees_D = 1000 # number of trees simulated to compute D
-n_trees_sgd = 1 # number of trees simulated at each step of SGD
+n_trees_sgd = 5 # number of trees simulated at each step of SGD
 ltt_points = 50 # number of ltt points
 times = seq(round(tp-1),0,length.out=ltt_points) # times
 max_attempts = 100 # max attempts for full tree to be created (in case all species become extinct before the end, retry max_attempts times)
@@ -77,8 +77,8 @@ ris_all = list()
   
   
 # FOR SAVING RESULT: IF NOT ON CLUSTER MUST DEFINE J
-cat("Tree n°", j, "simulated \n")
 j <- as.integer(Sys.getenv("j"))
+cat("Tree n°", j, "simulated \n", sep="")
 save.image(file = paste0("Sim_", j, ".RData"))
 
 

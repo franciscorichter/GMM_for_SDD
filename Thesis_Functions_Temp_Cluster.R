@@ -184,7 +184,7 @@ grad_descent_constD = function(tp, D, M, stats_obs, n_stats, n_pars, learn_rate,
   stats_diff_abs = c()
   ll = learn_rate
   MD = M%*%D
-  MD = sweep(MD, 2, abs(pars_i), '*')
+  MD = sweep(MD, 1, abs(pars_i), '*')
   
   t_i = Sys.time()
   while (c < iters){ # CHANGE CONDITION
@@ -211,8 +211,12 @@ grad_descent_constD = function(tp, D, M, stats_obs, n_stats, n_pars, learn_rate,
     
     # compare stats
     diff = stats_gen - stats_obs 
+    
+    # WEIGHTS
+    weights = abs(diff)/sum(abs(diff))
+    
     # update pars
-    pars_new = pars_i - learn_rate*(MD%*%(diff))
+    pars_new = pars_i - learn_rate*(MD%*%(weights*diff*n_stats))
     
     # update condition (check diff in pars with prev iter and diff in stats on this iter)
     cond = pars_new - pars_i
@@ -366,7 +370,7 @@ find_ic = function(tp, stats_obs, n_gen, n_treesXgen, n_stats, ltt_points, n_par
   }
   
   # find abs() of difference in stats
-  stat_diff = abs(sweep(stats, 2, stats_obs))
+  stat_diff = abs(sweep(stats, 1, stats_obs))
   # calc row sums
   sums = rowSums(stat_diff)
   # find minimum
@@ -555,7 +559,7 @@ calculate_gradients <- function(parameters, tree_data, covariates_list, include_
 }
 
 
-L2hylo = function (L, dropextinct = T) 
+L2phylo = function(L, dropextinct = T) 
 {
   L = L[order(abs(L[, 3])), 1:4]
   age = L[1, 1]
