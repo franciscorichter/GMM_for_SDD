@@ -46,7 +46,7 @@ ris_all = list()
   
   # converting to phylo and plotting
   #tree_full = DDD::L2phylo(unname(tree_mat), dropextinct=FALSE)
-  tree_extant = DDD::L2phylo(unname(tree_mat), dropextinct=TRUE)
+  tree_extant = L2phylo(unname(tree_mat), dropextinct=TRUE)
   
   # computing primary and LTT stats on observed tree
   stats_obs = calc_ltt_stat(tree_extant, ltt_points)
