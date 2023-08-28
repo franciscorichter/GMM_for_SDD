@@ -356,7 +356,7 @@ find_ic = function(tp, stats_obs, n_gen, n_treesXgen, n_stats, ltt_points, n_par
       res = create_tree_mat_phy_COV(tp, pars[i,1], pars[i,2:ncol(pars)], covariates_list, attempt, max_attempts)
       tree_mat = res$tree_mat
       # get extant tree
-      tree_extant = DDD::L2phylo(unname(tree_mat), dropextinct=TRUE)
+      tree_extant = L2phylo(unname(tree_mat), dropextinct=TRUE)
       # computing primary and LTT stats on observed tree
       stats_single = calc_ltt_stat(tree_extant, ltt_points)
       # append to stats
