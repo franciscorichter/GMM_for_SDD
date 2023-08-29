@@ -11,7 +11,7 @@ n_pars = 4 # number of parameters (including mu)
 learn_rate = 1e-4
 iters = 3000 # max number of iterations for the code to stop
 n_trees_D = 1000 # number of trees simulated to compute D
-n_trees_sgd = 5 # number of trees simulated at each step of SGD
+n_trees_sgd = 3 # number of trees simulated at each step of SGD
 ltt_points = 50 # number of ltt points
 times = seq(round(tp-1),0,length.out=ltt_points) # times
 max_attempts = 100 # max attempts for full tree to be created (in case all species become extinct before the end, retry max_attempts times)

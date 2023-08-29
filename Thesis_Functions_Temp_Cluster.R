@@ -1,4 +1,3 @@
-library(DDD)
 #library(treebalance)
 #library(MASS)
 library(ape)
