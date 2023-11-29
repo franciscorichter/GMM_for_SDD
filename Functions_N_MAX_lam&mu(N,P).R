@@ -164,7 +164,6 @@ grad_descent_constD = function(N_max, stats_obs, n_stats, n_pars, learn_rate, pa
       # Store D matrix info
       D_info = rbind(D_info, list(D))
       
-     
     }
     
     stats_gen = matrix(nrow=0,ncol=n_stats)
@@ -223,29 +222,29 @@ grad_descent_constD = function(N_max, stats_obs, n_stats, n_pars, learn_rate, pa
     
     
     # initial lag to start checking for patience
-    if (c>500){
-      # check if stats_diff_abs[i] > stats_diff_abs[i-1] and if so increase patience
-      target = mean(tail(stats_diff_abs, 20)[1:19]) # setting tail 20
-      value = mean(tail(stats_diff_abs, 3)) # setting tail 3
-      
-      if (value > target){
-        p = p + 1
-        
-        # check if p > max_p
-        if (p > patience){
-          cat("Reached patience limit of ", patience, ". Returning result \n")
-          # remove last p values
-          pars = head(pars, -p)
-          stats_diff = head(stats_diff, -p)
-          stats_diff_abs = head(stats_diff_abs, -p)
-          # compute runtime
-          runtime_SGD = Sys.time() - t_i
-          # return result
-          return(list(pars=pars, stats_diff=stats_diff, stats_diff_abs=stats_diff_abs,
-                      runtime_SGD=runtime_SGD, learn_rate=learn_rate))
-        }
-      } else {p = 0}
-    }
+    # if (c>500){
+    #   # check if stats_diff_abs[i] > stats_diff_abs[i-1] and if so increase patience
+    #   target = mean(tail(stats_diff_abs, 20)[1:19]) # setting tail 20
+    #   value = mean(tail(stats_diff_abs, 3)) # setting tail 3
+    #   
+    #   if (value > target){
+    #     p = p + 1
+    #     
+    #     # check if p > max_p
+    #     if (p > patience){
+    #       cat("Reached patience limit of ", patience, ". Returning result \n")
+    #       # remove last p values
+    #       pars = head(pars, -p)
+    #       stats_diff = head(stats_diff, -p)
+    #       stats_diff_abs = head(stats_diff_abs, -p)
+    #       # compute runtime
+    #       runtime_SGD = Sys.time() - t_i
+    #       # return result
+    #       return(list(pars=pars, stats_diff=stats_diff, stats_diff_abs=stats_diff_abs,
+    #                   runtime_SGD=runtime_SGD, learn_rate=learn_rate))
+    #     }
+    #   } else {p = 0}
+    # }
     
     
     # update pars_1 to pars_new
@@ -258,13 +257,13 @@ grad_descent_constD = function(N_max, stats_obs, n_stats, n_pars, learn_rate, pa
       print(c)
       cat("pars_new = ", pars_i, "\n")
       #cat("stats_diff = \n", round(diff,1), "\n")
-      cat("tot_abs_stats_diff = ", sum(abs(diff)), "\n", sep="")
+      cat("moving average of stats_diff_abs = ", sum(tail(stats_diff_abs,20)), "\n", sep="")
     }
   }
   
   runtime_SGD = Sys.time() - t_i
   
-  return(list(pars=pars, stats_diff=stats_diff, stats_diff_abs=stats_diff_abs, D=D, times=times))
+  return(list(pars=pars, stats_diff=stats_diff, stats_diff_abs=stats_diff_abs, D=D_info, times=times))
 }
 
 
