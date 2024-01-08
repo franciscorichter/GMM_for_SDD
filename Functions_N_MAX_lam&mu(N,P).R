@@ -531,14 +531,12 @@ lambda_tot <- function(t, N, betas, avg_phylodists){
   return(l_tot)
 }
 
-
 mu_tot <- function(t, N, alphas, avg_phylodists){
   # Isolating the N  b[1]*b_N*N terms and the pdm terms
   m_tot = N * exp(alphas[1]+alphas[length(alphas)]*N) * sum(exp(alphas[2]*(avg_phylodists+(2*t))))
   
   return(m_tot)
 }
-
 
 calc_avg_phylodiv = function(PDM_full){
   # find tip ids
@@ -549,8 +547,6 @@ calc_avg_phylodiv = function(PDM_full){
   
   return(list(tip_ids=tip_ids, avg_phylodists=avg_phylodists))
 }
-
-
 
 log_likelihood <- function(parameters, tree_data, covariates_list, include_diversity=TRUE) {
   # Extract parameters and betas from parameters

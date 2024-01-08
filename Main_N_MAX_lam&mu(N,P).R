@@ -1,16 +1,16 @@
 source("Functions_N_MAX_lam&mu(N,P).R")
 
-N_max = 4 # fixed number of species
+N_max = 50 # fixed number of species
 max_t = 100 # maximum time
 alphas = c(-2, -1, -0.03) # coefficients for extinction {A_0, A_P, A_N}
 betas = c(0.1, 0.001, -0.05) # coefficients for speciation {B_0, B_P, B_N}
-true_pars = c(alphas, betas) 
+true_pars = c(alphas, betas)
 
 
 n_stats = N_max*(N_max-1)/2 # number of statistics
 n_pars = length(true_pars) # number of parameters
 learn_rate = 1e-1 # learning rate
-iters = 100 # max number of iterations for SGD to stop
+iters = 1000 # max number of iterations for SGD to stop
 n_trees_D = 10 # number of trees simulated to compute D
 steps_D = 10 # D is calculated every steps_D iterations
 n_trees_sgd = 5 # number of trees simulated at each step of SGD
@@ -32,7 +32,7 @@ plot(tree_extant)
 stats_obs = stats_PDM(tree_extant)
 
 # Setting initial conditions
-pars_i = true_pars
+pars_i = true_pars/3
 
 # Running SGD with MoM
 res = grad_descent_constD(N_max, stats_obs, n_stats, n_pars, learn_rate, patience,
