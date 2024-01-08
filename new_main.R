@@ -2,7 +2,6 @@
 #library(gridExtra)
 
 
-
 N_max <- 100  # Number of species
 true_alphas <- c(-1.5, -0.5, -0.01)  # Initial guess for alphas
 true_betas <- c(0.05, 0.002, -0.03)  # Initial guess for betas
@@ -59,8 +58,6 @@ times_taken <- grad_descent_results$times
 parameters <- grad_descent_results$pars
 
 iterations <- 1:nrow(parameters)
-
-
 
 # Plot time taken for each iteration
 ggplot(data.frame(iteration=iterations[-c(1,2)], value=times_taken), aes(x=iteration, y=value)) +
